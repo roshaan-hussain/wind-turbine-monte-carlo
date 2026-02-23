@@ -14,5 +14,30 @@ def speeds(k, lambda_, hours):
     return wind_speeds
 
 
-wind_speeds = speeds(k, lambda_, 10)
-print(wind_speeds)
+wind_speeds = speeds(k, lambda_, 8760)
+
+# Cut in = 4
+# Rated speed = 13
+
+power_coff = 0.475
+rho = 1.225
+r = 50
+area = np.pi * r**2
+
+
+def output_power(power_coff, rho, area, speed):
+    return 0.5 * power_coff * rho * area * speed**3
+
+
+power_output = []
+
+# Iterating through every wind velocity, checking if above or below cut off and rated power speed and calculates the corresponding power.
+for v in wind_speeds:
+    if v < 4:
+        power_output.append(0)
+    elif v > 13:
+        power_output.append(output_power(power_coff, rho, area, 13))
+    else:
+        power_output.append(output_power(power_coff, rho, area, v))
+
+print(power_output)
